@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Álbum Copa 2026</title>
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: linear-gradient(135deg, #0b3d91, #00a859);
+            color: white;
+            text-align: center;
+        }
+        
+        header {
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+        }
+        
+        .pack,
+        .slot {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 10px;
+            width: 140px;
+            min-height: 120px;
+        }
+        
+        .slot {
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+        }
+        
+        .filled {
+            border: 2px solid #ffcc00;
+            background: rgba(255, 204, 0, 0.2);
+        }
+        
+        button {
+            margin-top: 5px;
+            padding: 5px 8px;
+            border: none;
+            border-radius: 8px;
+            background: #ffcc00;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* pacote */
+        #packBox {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #111;
+            padding: 15px;
+            border-radius: 12px;
+            display: none;
+            width: 260px;
+        }
+        
+        .player {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 6px 0;
+            padding: 6px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <header>🏆 Álbum Copa 2026 ⚽</header>
+    
+    <h3>📖 Seu Álbum</h3>
+    
+    <div class="container" id="album"></div>
+    
+    <h3>📦 Pacotes</h3>
+    <button onclick="abrirPacote()">Abrir Pacote</button>
+    
+    <!-- PACOTE -->
+    <div id="packBox">
+        <h3>📦 Jogadores</h3>
+        <div id="lista"></div>
+        <button onclick="fechar()">Fechar</button>
+    </div>
+    
+    <script>
+        const jogadores = [
+            "Neymar",
+            "Mbappé",
+            "Messi",
+            "Bellingham",
+            "Vinícius Jr",
+            "CR7"
+        ];
+        
+        // cria álbum vazio
+        const album = document.getElementById("album");
+        
+        let slots = {};
+        
+        function criarAlbum() {
+            jogadores.forEach(nome => {
+                const div = document.createElement("div");
+                div.className = "slot";
+                div.id = "slot_" + nome;
+                
+                div.innerHTML = `
+      <h4>${nome}</h4>
+      <p>❌ Faltando</p>
+    `;
+                
+                album.appendChild(div);
+                slots[nome] = div;
+            });
+        }
+        
+        function abrirPacote() {
+            const box = document.getElementById("packBox");
+            const lista = document.getElementById("lista");
+            lista.innerHTML = "";
+            
+            // gera 3 jogadores aleatórios
+            for (let i = 0; i < 3; i++) {
+                const j = jogadores[Math.floor(Math.random() * jogadores.length)];
+                
+                const div = document.createElement("div");
+                div.className = "player";
+                
+                div.innerHTML = `
+      🧑 ${j}
+      <button onclick="colar('${j}')">Colar</button>
+    `;
+                
+                lista.appendChild(div);
+            }
+            
+            box.style.display = "block";
+        }
+        
+        function colar(nome) {
+            const slot = slots[nome];
+            
+            if (!slot) return;
+            
+            slot.classList.add("filled");
+            slot.innerHTML = `
+    <h4>${nome}</h4>
+    <p>✅ COLADO</p>
+  `;
+        }
+        
+        function fechar() {
+            document.getElementById("packBox").style.display = "none";
+        }
+        
+        criarAlbum();
+    </script>
+    
+</body>
+
+</html>
